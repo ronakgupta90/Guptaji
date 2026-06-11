@@ -3,182 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROOT@RONAK:~#</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <title>Ronak | Premium Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* === CORE HACKER SETUP === */
+        /* === PREMIUM THEME COLORS === */
         :root {
-            --term-green: #0f0;
-            --term-dark: #050505;
-            --term-border: #1a4a1a;
-            --glow: 0 0 10px #0f0, 0 0 20px #0f0;
+            --bg-color: #070a13;
+            --card-bg: rgba(13, 17, 23, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #c9d1d9;
+            --keyword: #ff7b72;    /* Pink */
+            --string: #a5d6ff;     /* Light Blue */
+            --function: #d2a8ff;   /* Purple */
+            --variable: #79c0ff;   /* Cyan */
+            --comment: #8b949e;    /* Grey */
+            --glow: 0 0 20px rgba(121, 192, 255, 0.3);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Share Tech Mono', monospace; cursor: crosshair; }
-        body { background-color: #000; color: var(--term-green); overflow: hidden; height: 100vh; position: relative; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background-color: var(--bg-color); 
+            color: var(--text-main); 
+            font-family: 'Inter', sans-serif; 
+            overflow: hidden; 
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+        }
         a { text-decoration: none; color: inherit; }
-        button { border: none; background: transparent; cursor: pointer; color: var(--term-green); font-family: 'Share Tech Mono', monospace; }
+        button { border: none; background: transparent; cursor: pointer; }
 
-        /* === CRT SCANLINE EFFECT === */
-        .crt::before {
-            content: " ";
-            display: block;
-            position: absolute;
-            top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            z-index: 999;
-            background-size: 100% 3px, 3px 100%;
-            pointer-events: none;
-            opacity: 0.8;
+        /* === ANIMATED PREMIUM BACKGROUND === */
+        .bg-animation {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1;
+            background: linear-gradient(45deg, #070a13, #0f172a, #1e1b4b, #070a13);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+        }
+        @keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .orb {
+            position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; animation: float 10s infinite alternate;
+        }
+        .orb-1 { width: 400px; height: 400px; background: #3b82f6; top: -100px; left: -100px; }
+        .orb-2 { width: 300px; height: 300px; background: #8b5cf6; bottom: -50px; right: -50px; animation-delay: -5s; }
+
+        @keyframes float { 0% { transform: translate(0, 0); } 100% { transform: translate(50px, 50px); } }
+
+        /* === INTRO LOADER === */
+        #intro { position: fixed; inset: 0; background: var(--bg-color); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.8s ease; }
+        .loader-text { font-family: 'JetBrains Mono', monospace; font-size: 1.5rem; color: var(--variable); margin-bottom: 20px; }
+        .init-btn { background: var(--text-main); color: var(--bg-color); padding: 12px 30px; border-radius: 6px; font-weight: bold; font-family: 'JetBrains Mono', monospace; transition: 0.3s; }
+        .init-btn:hover { background: var(--variable); transform: translateY(-2px); box-shadow: var(--glow); }
+
+        /* === MAIN CONTENT IDE WINDOW === */
+        #main-content { display: none; opacity: 0; transition: opacity 1s; width: 100%; max-width: 900px; padding: 20px; z-index: 10; }
+        
+        .ide-window {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            overflow: hidden;
+            transform: translateY(20px);
+            animation: slideUp 1s forwards 0.5s;
+        }
+        @keyframes slideUp { to { transform: translateY(0); } }
+
+        /* IDE Header (Mac Style) */
+        .ide-header {
+            background: rgba(1, 4, 9, 0.8);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--card-border);
+        }
+        .mac-dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        .ide-title { margin: 0 auto; font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; color: var(--comment); padding-right: 40px; }
+
+        /* IDE Body */
+        .ide-body {
+            display: flex;
+            padding: 40px;
+            gap: 40px;
         }
 
-        /* === INTRO SCREEN === */
-        #intro { position: fixed; inset: 0; background: #000; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease; }
-        .intro-text { font-size: 2rem; margin-bottom: 20px; text-shadow: var(--glow); animation: glitch 1s infinite alternate; }
-        .click-me-btn { border: 1px solid var(--term-green); padding: 15px 30px; font-size: 1.2rem; text-transform: uppercase; transition: 0.2s; background: rgba(0, 255, 0, 0.1); }
-        .click-me-btn:hover { background: var(--term-green); color: #000; box-shadow: var(--glow); }
-
-        @keyframes glitch {
-            0% { transform: translate(2px, 0) skew(0deg); }
-            20% { transform: translate(-2px, 0) skew(0deg); }
-            40% { transform: translate(0, 2px) skew(0deg); }
-            60% { transform: translate(0, -2px) skew(0deg); }
-            80% { transform: translate(2px, 2px) skew(0deg); }
-            100% { transform: translate(-2px, -2px) skew(0deg); }
+        /* Left: Profile Image & Controls */
+        .profile-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
         }
-
-        /* === MATRIX BACKGROUND === */
-        #matrix-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.4; }
-
-        /* === MAIN CONTENT === */
-        #main-content { display: none; padding: 20px; opacity: 0; transition: opacity 1s; height: 100vh; overflow-y: auto; flex-direction: column; align-items: center; z-index: 10; position: relative; scrollbar-width: none; }
-        #main-content::-webkit-scrollbar { display: none; }
-
-        /* === HEADER === */
-        header { width: 100%; max-width: 900px; display: flex; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px dashed var(--term-border); margin-bottom: 40px; }
-        .logo { font-size: 1.5rem; font-weight: bold; }
-        .nav-links a { margin-left: 20px; border: 1px solid var(--term-border); padding: 5px 15px; transition: 0.3s; }
-        .nav-links a:hover { background: var(--term-green); color: #000; }
-
-        /* === TERMINAL WINDOW (PROFILE CARD) === */
-        .terminal-window { width: 100%; max-width: 700px; background: rgba(5, 5, 5, 0.85); border: 1px solid var(--term-green); box-shadow: 0 0 15px rgba(0,255,0,0.2); backdrop-filter: blur(5px); }
-        .terminal-header { background: var(--term-green); color: #000; padding: 5px 10px; display: flex; justify-content: space-between; font-weight: bold; font-size: 0.9rem; }
-        .terminal-body { padding: 30px; }
-
-        .profile-section { display: flex; align-items: center; gap: 30px; margin-bottom: 30px; border-bottom: 1px dashed var(--term-border); padding-bottom: 20px; }
-        .profile-img-container { width: 120px; height: 120px; border: 2px solid var(--term-green); padding: 5px; position: relative; }
-        .profile-img-container::before { content: ''; position: absolute; inset: -5px; border: 1px solid var(--term-green); opacity: 0.5; animation: scanline 2s linear infinite; }
-        .profile-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%) contrast(1.2); transition: 0.3s; }
-        .profile-img:hover { filter: grayscale(0%); }
-
-        @keyframes scanline {
-            0% { transform: translateY(0); height: 1px; background: var(--term-green); }
-            100% { transform: translateY(130px); height: 1px; background: var(--term-green); }
+        .img-box {
+            width: 180px; height: 180px;
+            border-radius: 20px;
+            padding: 4px;
+            background: linear-gradient(135deg, var(--variable), var(--function));
+            box-shadow: var(--glow);
         }
+        .img-box img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            background: var(--bg-color);
+        }
+        
+        .sound-btn {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
+            transition: 0.3s;
+        }
+        .sound-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--variable); color: var(--variable); }
 
-        .info-section h1 { font-size: 2rem; text-transform: uppercase; margin-bottom: 10px; text-shadow: var(--glow); }
-        .role-wrapper { font-size: 1.1rem; color: #aaa; }
-        #typing-role { color: var(--term-green); }
-        .cursor { display: inline-block; width: 8px; height: 18px; background-color: var(--term-green); animation: blink 0.7s infinite; vertical-align: text-bottom; }
+        /* Right: Code Info */
+        .code-side {
+            flex: 1;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .line { display: flex; }
+        .num { color: var(--comment); width: 30px; user-select: none; text-align: right; margin-right: 20px; }
+        
+        .code-content span { transition: 0.3s; }
+        .code-content span:hover { text-shadow: 0 0 8px currentColor; }
+
+        /* Syntax Colors */
+        .kw { color: var(--keyword); } /* const, return */
+        .fn { color: var(--function); } /* function names */
+        .str { color: var(--string); } /* "strings" */
+        .var { color: var(--variable); } /* variables */
+        .cmt { color: var(--comment); } /* comments */
+
+        /* Typing Effect cursor */
+        .cursor { display: inline-block; width: 8px; height: 1.2em; background: var(--variable); vertical-align: middle; animation: blink 1s step-end infinite; }
         @keyframes blink { 50% { opacity: 0; } }
 
-        .about-text { font-size: 0.95rem; line-height: 1.6; margin-bottom: 30px; color: #ddd; }
-        .about-text .prompt { color: var(--term-green); font-weight: bold; margin-right: 10px; }
-
-        /* === SOCIAL LINKS === */
-        .social-container { display: flex; gap: 15px; margin-bottom: 30px; flex-wrap: wrap; }
-        .social-btn { border: 1px solid var(--term-green); padding: 10px 20px; display: flex; align-items: center; gap: 10px; transition: 0.3s; text-transform: uppercase; font-size: 0.85rem; }
-        .social-btn:hover { background: var(--term-green); color: #000; box-shadow: var(--glow); }
-
-        /* === CONTROLS === */
-        .ctl-buttons { display: flex; justify-content: space-between; border-top: 1px dashed var(--term-border); padding-top: 20px; }
-        .sound-btn { border: 1px dashed var(--term-green); padding: 8px 15px; font-size: 0.8rem; }
-        .sound-btn:hover { background: rgba(0, 255, 0, 0.2); }
-        .see-more-btn { background: var(--term-green); color: #000; padding: 10px 25px; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
-        .see-more-btn:hover { box-shadow: var(--glow); }
-
-        footer { margin-top: auto; padding: 20px; text-align: center; font-size: 0.75rem; color: #666; width: 100%; border-top: 1px solid #111; }
+        /* Social Links */
+        .social-dock {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--card-border);
+        }
+        .s-link {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+        .s-link:hover { background: rgba(255,255,255,0.1); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .s-link i { color: var(--variable); }
 
         /* MOBILE FIX */
         @media (max-width: 768px) {
-            .profile-section { flex-direction: column; text-align: center; }
-            header { flex-direction: column; gap: 15px; }
-            .ctl-buttons { flex-direction: column; gap: 15px; align-items: center; }
+            .ide-body { flex-direction: column; padding: 20px; gap: 30px; align-items: center; }
+            .code-side { font-size: 0.85rem; width: 100%; overflow-x: auto; }
+            .num { display: none; } /* Hide numbers on mobile for space */
+            .img-box { width: 150px; height: 150px; }
+            .social-dock { flex-wrap: wrap; justify-content: center; }
         }
     </style>
 </head>
-<body class="crt">
+<body>
+
+    <div class="bg-animation"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
 
     <div id="intro">
-        <div class="intro-text">SYSTEM.BOOTING...</div>
-        <button class="click-me-btn" onclick="startPortfolio()">[ INITIALIZE CONNECTION ]</button>
+        <div class="loader-text">Compiling Ronak.js...</div>
+        <button class="init-btn" onclick="startPortfolio()">Execute Portfolio</button>
     </div>
 
-    <canvas id="matrix-canvas"></canvas>
-
     <div id="main-content">
-        <header>
-            <div class="logo">root@ronak:~#</div>
-            <div class="nav-links">
-                <a href="#">[HOME]</a>
-                <a href="https://t.me/MusicXUpdate" target="_blank">[CHANNEL]</a>
+        <div class="ide-window">
+            <div class="ide-header">
+                <div class="mac-dots">
+                    <div class="dot red"></div>
+                    <div class="dot yellow"></div>
+                    <div class="dot green"></div>
+                </div>
+                <div class="ide-title">developer_profile.js — VS Code</div>
             </div>
-        </header>
 
-        <section class="terminal-window">
-            <div class="terminal-header">
-                <span>ronak@mainframe:~</span>
-                <span>_ X</span>
-            </div>
-            
-            <div class="terminal-body">
-                <div class="profile-section">
-                    <div class="profile-img-container">
-                        <img src="https://files.catbox.moe/g83rfx.webp" alt="Ronak Gupta" class="profile-img">
+            <div class="ide-body">
+                <div class="profile-side">
+                    <div class="img-box">
+                        <img src="https://files.catbox.moe/g83rfx.webp" alt="Ronak Gupta">
                     </div>
-                    <div class="info-section">
-                        <h1>Ronak Gupta</h1>
-                        <div class="role-wrapper">
-                            > STATUS: <span id="typing-role"></span><span class="cursor"></span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="about-text">
-                    <p><span class="prompt">root@ronak:~$</span> cat about_me.txt</p>
-                    <p>> I'm a passionate self-taught developer building creative digital experiences. What started as curiosity became a journey of continuous learning. Specialized in websites, Telegram bots, modern UI designs, and interactive web applications.</p>
-                    <br>
-                    <p><span class="prompt">root@ronak:~$</span> ./execute_skills.sh</p>
-                    <p>> Loading modules... [OK]</p>
-                </div>
-                
-                <div class="social-container">
-                    <a href="https://t.me/ronakgupta321" target="_blank" class="social-btn">
-                        <i class="fa-brands fa-telegram"></i> Telegram
-                    </a>
-                    <a href="https://youtube.com/@Doreamonfanslovers" target="_blank" class="social-btn">
-                        <i class="fa-brands fa-youtube"></i> YouTube
-                    </a>
-                    <a href="https://instagram.com/ronakgupta101" target="_blank" class="social-btn">
-                        <i class="fa-brands fa-instagram"></i> Instagram
-                    </a>
-                </div>
-                
-                <div class="ctl-buttons">
                     <button id="sound-btn" class="sound-btn" onclick="toggleMusic()">
                         <i id="sound-icon" class="fas fa-volume-up"></i>
-                        <span id="sound-text">AUDIO_ON</span>
+                        <span id="sound-text">Audio: Play()</span>
                     </button>
-                    <button class="see-more-btn">RUN EXPLORE.EXE</button>
+                </div>
+
+                <div class="code-side">
+                    <div class="line"><span class="num">1</span><span class="code-content"><span class="cmt">// Welcome to my digital workspace</span></span></div>
+                    <div class="line"><span class="num">2</span><span class="code-content"><span class="kw">const</span> <span class="var">developer</span> = {</span></div>
+                    <div class="line"><span class="num">3</span><span class="code-content">&nbsp;&nbsp;name: <span class="str">"Ronak Gupta"</span>,</span></div>
+                    <div class="line"><span class="num">4</span><span class="code-content">&nbsp;&nbsp;status: <span class="str">"Digital Nomad"</span>,</span></div>
+                    <div class="line"><span class="num">5</span><span class="code-content">&nbsp;&nbsp;currentRole: <span class="str" id="typing-role">""</span><span class="cursor"></span>,</span></div>
+                    <div class="line"><span class="num">6</span><span class="code-content">&nbsp;&nbsp;skills: [<span class="str">"Web Dev"</span>, <span class="str">"UI/UX"</span>, <span class="str">"Telegram Bots"</span>],</span></div>
+                    <div class="line"><span class="num">7</span><span class="code-content">&nbsp;&nbsp;passion: <span class="kw">function</span>() {</span></div>
+                    <div class="line"><span class="num">8</span><span class="code-content">&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> <span class="str">"Building creative digital experiences."</span>;</span></div>
+                    <div class="line"><span class="num">9</span><span class="code-content">&nbsp;&nbsp;}</span></div>
+                    <div class="line"><span class="num">10</span><span class="code-content">};</span></div>
+
+                    <div class="social-dock">
+                        <a href="https://t.me/ronakgupta321" target="_blank" class="s-link">
+                            <i class="fa-brands fa-telegram"></i> Telegram
+                        </a>
+                        <a href="https://youtube.com/@Doreamonfanslovers" target="_blank" class="s-link">
+                            <i class="fa-brands fa-youtube"></i> YouTube
+                        </a>
+                        <a href="https://instagram.com/ronakgupta101" target="_blank" class="s-link">
+                            <i class="fa-brands fa-instagram"></i> Instagram
+                        </a>
+                    </div>
                 </div>
             </div>
-        </section>
-
-        <footer>
-            <p>ENCRYPTED & SECURED BY © 2026 RONAK GUPTA.</p>
-        </footer>
+        </div>
     </div>
 
     <audio id="bg-music" loop preload="auto">
@@ -186,16 +252,16 @@
     </audio>
 
     <script>
-        // === TYPING EFFECT LOGIC ===
-        const roles = ["Web_Developer", "UI/UX_Designer", "Telegram_Bot_Dev", "JS_Programmer"];
-        const typingSpeed = 80; 
+        // Typing Effect array logic
+        const roles = ['"Frontend Developer"', '"Tech Enthusiast"', '"Creative Coder"'];
+        const typingSpeed = 70; 
         const erasingSpeed = 40; 
-        const newTextDelay = 1500; 
+        const newTextDelay = 2000; 
         
         const intro = document.getElementById('intro');
         const mainContent = document.getElementById('main-content');
         const bgMusic = document.getElementById('bg-music');
-        bgMusic.volume = 0.5; // Set volume to 50%
+        bgMusic.volume = 0.5; // Premium ambient volume
         
         const soundBtnText = document.getElementById('sound-text');
         const soundBtnIcon = document.getElementById('sound-icon');
@@ -209,18 +275,18 @@
             intro.style.opacity = '0';
             setTimeout(() => {
                 intro.style.display = 'none';
-                mainContent.style.display = 'flex';
+                mainContent.style.display = 'block';
                 setTimeout(() => mainContent.style.opacity = '1', 50);
                 playMusic();
-                typeRole();
-            }, 500);
+                setTimeout(typeRole, 1000);
+            }, 800);
         }
 
         function playMusic() {
             bgMusic.play().then(() => {
                 isMusicPlaying = true;
                 updateSoundButton();
-            }).catch(e => console.log("Audio blocked", e));
+            }).catch(e => console.log("Audio blocked by browser", e));
         }
 
         function toggleMusic() {
@@ -236,11 +302,11 @@
 
         function updateSoundButton() {
             if (isMusicPlaying) {
-                soundBtnIcon.className = "fas fa-volume-up";
-                soundBtnText.innerText = "AUDIO_ON";
+                soundBtnIcon.className = "fas fa-pause";
+                soundBtnText.innerText = "Audio: Pause()";
             } else {
-                soundBtnIcon.className = "fas fa-volume-mute";
-                soundBtnText.innerText = "AUDIO_OFF";
+                soundBtnIcon.className = "fas fa-play";
+                soundBtnText.innerText = "Audio: Play()";
             }
         }
 
@@ -264,48 +330,6 @@
                 setTimeout(typeRole, typingSpeed + 500);
             }
         }
-
-        // === MATRIX RAIN EFFECT ===
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
-        const fontSize = 14;
-        const columns = canvas.width / fontSize;
-        
-        const drops = [];
-        for (let x = 0; x < columns; x++) {
-            drops[x] = 1;
-        }
-
-        function drawMatrix() {
-            // Black bg with opacity to show trails
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#0F0'; // Green text
-            ctx.font = fontSize + 'px "Share Tech Mono", monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = letters.charAt(Math.floor(Math.random() * letters.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-
-        setInterval(drawMatrix, 33);
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
     </script>
 </body>
 </html>
